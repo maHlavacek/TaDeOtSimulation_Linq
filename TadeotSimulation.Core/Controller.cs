@@ -13,6 +13,10 @@ namespace TadeotSimulation.Core
         private const int MAX_WAITING_MINUTES = 40;
 
         private List<Visitor> _listOfVisitors;
+        private List<Visitor> _waitingVisitors;
+
+        private int _countOfAllVisitors;
+        private List<Visitor> _finishedVisitors;
 
         public event EventHandler<string> Log;
 
@@ -51,7 +55,7 @@ namespace TadeotSimulation.Core
             DateTime timeToStart = _listOfVisitors.Select(s => s.EntryTime).Min().AddMinutes(-60);
             FastClock.Instance.Time = timeToStart;
             FastClock.Instance.OneMinuteIsOver += Instance_OneMinuteIsOver;
-            Presentation.Instance.PresentationFinished += Instance_PresentationFinished;
+           // Presentation.Instance.PresentationFinished += Instance_PresentationFinished;
             FastClock.Instance.IsRunning = true;
         }
 
@@ -68,22 +72,22 @@ namespace TadeotSimulation.Core
         /// <param name="time"></param>
         public void OnOneMinuteIsOver(DateTime time)
         {
-            _waitingPeople = _listOfVisitors.Where(w => w.EntryTime <= time).ToList();
-            _countVisitors = _waitingPeople.Count;
-            _countPeople = _waitingPeople.Count + _waitingPeople.Sum(s => s.Adults);
+            _waitingVisitors = _listOfVisitors.Where(w => w.EntryTime <= time).ToList();
+           // _countVisitors = _waitingVisitors.Count;
+            _countOfAllVisitors = _waitingVisitors.Count + _waitingVisitors.Sum(s => s.Adults);
 
             if (
-                _waitingPeople.Count + _waitingPeople.Sum(s => s.Adults) >= MIN_PEOPLE_PER_PRESENTATION
-                && _presentationIsFinished
-                || _lastPresentationFinished.AddMinutes(MAX_WAITING_MINUTES) == time
-                && _waitingPeople.Count > 0
+                _waitingVisitors.Count + _waitingVisitors.Sum(s => s.Adults) >= MIN_PEOPLE_PER_PRESENTATION
+              //  && _presentationIsFinished
+              //  || _lastPresentationFinished.AddMinutes(MAX_WAITING_MINUTES) == time
+                && _waitingVisitors.Count > 0
                 )
             {
-                foreach (Visitor visitor in _waitingPeople)
+                foreach (Visitor visitor in _waitingVisitors)
                 {
                     _listOfVisitors.Remove(visitor);
                 }
-                Presentation.Instance.StartPresentation(_waitingPeople);
+              //  Presentation.Instance.StartPresentation(_waitingVisitors);
             }
         }
     }
