@@ -12,6 +12,7 @@ namespace TadeotSimulation.Core
         public DateTime EndOfPresentation { get; private set; }
         public int PresentationNumber { get; private set; }
         public DateTime StartOfPresentation { get; private set; }
+        public List<Visitor> Visitors { get; private set; }
         #endregion
 
         #region Methods

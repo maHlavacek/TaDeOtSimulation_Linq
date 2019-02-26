@@ -14,6 +14,7 @@ namespace TadeotSimulation.Core
 
         private List<Visitor> _listOfVisitors;
         private List<Visitor> _waitingVisitors;
+        private List<Presenter> _presenters;
 
         private int _countOfAllVisitors;
         private List<Visitor> _finishedVisitors;
